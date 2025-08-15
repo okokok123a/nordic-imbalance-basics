@@ -24,6 +24,9 @@ python src\make_heatmaps.py --input data\SE3.parquet --out reports
 ```
 
 ## Outputs (first drop)
+
+**Methods & reproducibility:** see [METHOD.md](METHOD.md) for data sources, steps, assumptions, and checks.
+
 - Hour×weekday heatmaps:
 
  <img alt="Imbalance price" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/heatmap_price.png" width="480">
@@ -37,6 +40,7 @@ python src\make_heatmaps.py --input data\SE3.parquet --out reports
 <img alt="SE3 DA price — May 2025" src="reports/SE3/da_price.png" width="640">
 
 See quick stats: [reports/SE3/da_price_stats.md](reports/SE3/da_price_stats.md)
+
 
 
 ## SE3 (real data)
