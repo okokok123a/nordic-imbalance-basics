@@ -31,3 +31,10 @@ python src\make_heatmaps.py --input data\SE3.parquet --out reports
  <img alt="Imbalance volume" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/heatmap_volume.png" width="480">
 
 - Quick stats: see reports/stats.md
+
+## SE3 (real data)
+- Heatmaps:
+  - <img alt="SE3 real — price" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/SE3/heatmap_price.png" width="480">
+  - <img alt="SE3 real — volume" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/SE3/heatmap_volume.png" width="480">
+- Stats: see [`reports/SE3/stats.md`](reports/SE3/stats.md)
+
