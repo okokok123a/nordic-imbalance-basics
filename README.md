@@ -32,6 +32,13 @@ python src\make_heatmaps.py --input data\SE3.parquet --out reports
 
 - Quick stats: see reports/stats.md
 
+## Day-ahead price (SE3 · May 2025)
+
+<img alt="SE3 DA price — May 2025" src="reports/SE3/da_price.png" width="640">
+
+See quick stats: [reports/SE3/da_price_stats.md](reports/SE3/da_price_stats.md)
+
+
 ## SE3 (real data)
 - Heatmaps:
   - <img alt="SE3 real — price" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/SE3/heatmap_price.png" width="480">
