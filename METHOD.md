@@ -23,6 +23,7 @@ Scripts:
 
 ## Repo layout (relevant bits)
 
+```text
 data/
   DA_SE3.parquet                  # merged DA prices (tz=Europe/Brussels)
   SE3.parquet, SE3.csv            # imbalance (demo)
@@ -41,4 +42,4 @@ src/
   merge_prices_csvs.py            # merges daily Energy Prices CSVs → Parquet
   plot_da_prices.py               # DA price plot + stats
   make_heatmaps.py                # hour×weekday heatmaps
-
+```
