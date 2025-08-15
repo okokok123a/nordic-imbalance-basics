@@ -52,6 +52,8 @@ See quick stats: [reports/stats.md](reports/stats.md)
 
 <img alt="SE3: DA vs Imbalance price — May 2025" src="reports/SE3/da_vs_imbalance.png" width="640">
 
+**One-page view:** see [reports/SE3/weekly_report.md](reports/SE3/weekly_report.md)
+
 See quick stats: [reports/SE3/da_vs_imbalance_stats.md](reports/SE3/da_vs_imbalance_stats.md)
 
 
