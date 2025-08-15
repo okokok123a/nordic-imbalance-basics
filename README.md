@@ -47,6 +47,12 @@ See quick stats: [reports/SE3/da_price_stats.md](reports/SE3/da_price_stats.md)
 See quick stats: [reports/stats.md](reports/stats.md)
 </details>
 
+### DA price ↔ Imbalance price — SE3 (May 2025)
+
+<img alt="SE3: DA vs Imbalance price — May 2025" src="reports/SE3/da_vs_imbalance.png" width="640">
+
+See quick stats: [reports/SE3/da_vs_imbalance_stats.md](reports/SE3/da_vs_imbalance_stats.md)
+
 
 ## Using your own CSV (real data)
 Convert any CSV to this repo’s schema, then build charts.
