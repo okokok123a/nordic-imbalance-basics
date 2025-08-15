@@ -21,8 +21,9 @@ python src\fetch_imbalance.py --area SE3 --start 2025-05-01 --end 2025-05-31 --o
 
 REM Heatmaps + quick stats
 python src\make_heatmaps.py --input data\SE3.parquet --out reports
+```
 
-Outputs (first drop)
+## Outputs (first drop)
 - Hour×weekday heatmaps:
 
  <img alt="Imbalance price" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/heatmap_price.png" width="480">
