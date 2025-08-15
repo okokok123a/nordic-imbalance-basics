@@ -23,31 +23,30 @@ REM Heatmaps + quick stats
 python src\make_heatmaps.py --input data\SE3.parquet --out reports
 ```
 
-## Outputs (first drop)
+## Outputs 
 
 **Methods & reproducibility:** see [METHOD.md](METHOD.md) for data sources, steps, assumptions, and checks.
 
-- Hour×weekday heatmaps:
+### Heatmaps — SE3 (real data)
+<img alt="SE3 real — price" src="reports/SE3/heatmap_price.png" width="480">
+<img alt="SE3 real — volume" src="reports/SE3/heatmap_volume.png" width="480">
 
- <img alt="Imbalance price" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/heatmap_price.png" width="480">
+See quick stats: [reports/SE3/stats.md](reports/SE3/stats.md)
 
- <img alt="Imbalance volume" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/heatmap_volume.png" width="480">
-
-- Quick stats: see reports/stats.md
-
-## Day-ahead price (SE3 · May 2025)
-
+### Day-ahead price — SE3 · May 2025
 <img alt="SE3 DA price — May 2025" src="reports/SE3/da_price.png" width="640">
 
 See quick stats: [reports/SE3/da_price_stats.md](reports/SE3/da_price_stats.md)
 
+<details>
+<summary>Demo heatmaps (synthetic, May 2025) — optional</summary>
 
+<img alt="Imbalance price (demo)" src="reports/heatmap_price.png" width="320">
+<img alt="Imbalance volume (demo)" src="reports/heatmap_volume.png" width="320">
 
-## SE3 (real data)
-- Heatmaps:
-  - <img alt="SE3 real — price" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/SE3/heatmap_price.png" width="480">
-  - <img alt="SE3 real — volume" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/SE3/heatmap_volume.png" width="480">
-- Stats: see [`reports/SE3/stats.md`](reports/SE3/stats.md)
+See quick stats: [reports/stats.md](reports/stats.md)
+</details>
+
 
 ## Using your own CSV (real data)
 Convert any CSV to this repo’s schema, then build charts.
@@ -63,5 +62,5 @@ python src\make_heatmaps.py --input data\SE3_real.parquet --out reports\SE3
 - `ts` — timestamp (with or without timezone)
 - `price_eur_mwh` — numeric
 - `imbalance_volume_mwh` — numeric (± for direction)
-
+```
 
