@@ -38,3 +38,19 @@ python src\make_heatmaps.py --input data\SE3.parquet --out reports
   - <img alt="SE3 real — volume" src="https://raw.githubusercontent.com/EmotionalTrader/nordic-imbalance-basics/main/reports/SE3/heatmap_volume.png" width="480">
 - Stats: see [`reports/SE3/stats.md`](reports/SE3/stats.md)
 
+## Using your own CSV (real data)
+Convert any CSV to this repo’s schema, then build charts.
+
+```bat
+REM 1) Convert CSV -> Parquet
+python src\csv_to_parquet.py --csv data\YOUR_FILE.csv --ts-col ts --price-col price_eur_mwh --volume-col imbalance_volume_mwh --area SE3 --out data\SE3_real.parquet
+
+REM 2) Make heatmaps + stats
+python src\make_heatmaps.py --input data\SE3_real.parquet --out reports\SE3
+
+**Expected columns in CSV:**
+- `ts` — timestamp (with or without timezone)
+- `price_eur_mwh` — numeric
+- `imbalance_volume_mwh` — numeric (± for direction)
+
+
