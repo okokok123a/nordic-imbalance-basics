@@ -66,6 +66,8 @@ See quick stats: [reports/SE4/da_price_stats.md](reports/SE4/da_price_stats.md)
 
 See quick stats: [reports/SE3_SE4/da_spread_stats.md](reports/SE3_SE4/da_spread_stats.md)
 
+Weekly report (one-pager): [reports/SE4/weekly_report.md](reports/SE4/weekly_report.md)
+
 
 ## Using your own CSV (real data)
 Convert any CSV to this repo’s schema, then build charts.
