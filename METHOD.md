@@ -24,6 +24,7 @@ Scripts:
 - Zone in this drop: SE3, May 2025.
 - Current acquisition: daily **CSV exports** from the portal UI, merged locally.
 - Planned: REST API via entsoe-py once a securityToken is active (stored in .env, never committed).
+- Also merged SE4 (May 2025) from daily portal CSV exports → `data/DA_SE4.parquet`.
 
 ---
 
@@ -33,6 +34,7 @@ Scripts:
 data/
   DA_SE3.parquet                  # merged DA prices (tz=Europe/Brussels)
   SE3.parquet, SE3.csv            # imbalance (demo)
+  DA_SE4.parquet                  # merged DA prices for SE4
 
 reports/
   SE3/
@@ -42,9 +44,21 @@ reports/
     heatmap_volume.png            # imbalance heatmap (volume)
     stats.md                      # imbalance quick stats
 
+reports/
+  SE4/
+    da_price.png                  # SE4 DA price plot (May 2025)
+    da_price_stats.md             # stats for the plot
+    weekly_report.md              # one-pager links for SE4
+
+reports/
+  SE3_SE4/
+    da_spread.png                 # SE4 − SE3 DA spread (May 2025)
+    da_spread_stats.md            # stats for the spread
+
 src/
   fetch_imbalance.py
   csv_to_parquet.py
+  plot_spread.py                  # SE4 − SE3 DA spread plot + stats
   merge_prices_csvs.py            # merges daily Energy Prices CSVs → Parquet
   plot_da_prices.py               # DA price plot + stats
   join_da_imbalance.py            # joins DA price with imbalance; scatter + stats
