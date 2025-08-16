@@ -28,6 +28,12 @@ python src\make_heatmaps.py --input data\SE3.parquet --out reports
 
 **Methods & reproducibility:** see [METHOD.md](METHOD.md) for data sources, steps, assumptions, and checks.
 
+**Quick links:**  
+[SE3 weekly report](reports/SE3/weekly_report.md) ·
+[SE4 weekly report](reports/SE4/weekly_report.md) ·
+[SE3 DA ↔ Imbalance (stats)](reports/SE3/da_vs_imbalance_stats.md) ·
+[SE4 − SE3 spread (stats)](reports/SE3_SE4/da_spread_stats.md)
+
 ### Heatmaps — SE3 (real data)
 <img alt="SE3 real — price" src="reports/SE3/heatmap_price.png" width="480">
 <img alt="SE3 real — volume" src="reports/SE3/heatmap_volume.png" width="480">
@@ -68,9 +74,22 @@ See quick stats: [reports/SE3_SE4/da_spread_stats.md](reports/SE3_SE4/da_spread_
 
 Weekly report (one-pager): [reports/SE4/weekly_report.md](reports/SE4/weekly_report.md)
 
+### Rebid vs Accept — SE3 (May 2025)
+<img alt="SE3 rebid vs accept — by hour" src="reports/SE3/rebid_accept_by_hour.png" width="640">
+
+See summary: [reports/SE3/rebid_accept_summary.md](reports/SE3/rebid_accept_summary.md)
+
+### IDA Prep Sheet — SE3 (daily)
+- CSV: [reports/SE3/ida_prepsheet.csv](reports/SE3/ida_prepsheet.csv)
+- One-pager: [reports/SE3/ida_prepsheet.md](reports/SE3/ida_prepsheet.md)
+
+What’s inside: per-day DA/Imbalance means & std, correlation, # of big deviation hours (|Imb−DA| > 50 €/MWh), p95 abs spread, max/min spread.
+
 
 ## Using your own CSV (real data)
 Convert any CSV to this repo’s schema, then build charts.
+
+**Note:** Change `--area` to your zone (`SE3`/`SE4`/`FI`) to match your data.
 
 ```bat
 REM 1) Convert CSV -> Parquet
@@ -78,9 +97,16 @@ python src\csv_to_parquet.py --csv data\YOUR_FILE.csv --ts-col ts --price-col pr
 
 REM 2) Make heatmaps + stats
 python src\make_heatmaps.py --input data\SE3_real.parquet --out reports\SE3
-
+```
 **Expected columns in CSV:**
 - `ts` — timestamp (with or without timezone)
 - `price_eur_mwh` — numeric
 - `imbalance_volume_mwh` — numeric (± for direction)
-```
+
+---
+
+**Releases:**  
+[v0.1.0](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.1.0) ·
+[v0.2.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.2.0-demo) ·
+[v0.3.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.3.0-demo)
+
