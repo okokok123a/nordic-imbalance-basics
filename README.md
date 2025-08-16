@@ -99,7 +99,7 @@ Assumptions: 10 MWh cap, 5 MW power, 90% round-trip efficiency; simple DA-only r
 
 See stats: [reports/SE4/battery_stats.md](reports/SE4/battery_stats.md)
 
-**Schedule CSV (optional):** `reports/<ZONE>/battery_schedule.csv` *(coming soon)*
+**Schedule CSV:** `reports/<ZONE>/battery_schedule.csv` *(coming soon)*
 
 
 ## Using your own CSV (real data)
