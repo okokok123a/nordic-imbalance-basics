@@ -34,6 +34,8 @@ python src\make_heatmaps.py --input data\SE3.parquet --out reports
 
 See quick stats: [reports/SE3/stats.md](reports/SE3/stats.md)
 
+Weekly report (one-pager): [reports/SE3/weekly_report.md](reports/SE3/weekly_report.md)
+
 ### Day-ahead price — SE3 · May 2025
 <img alt="SE3 DA price — May 2025" src="reports/SE3/da_price.png" width="640">
 
@@ -52,9 +54,17 @@ See quick stats: [reports/stats.md](reports/stats.md)
 
 <img alt="SE3: DA vs Imbalance price — May 2025" src="reports/SE3/da_vs_imbalance.png" width="640">
 
-**One-page view:** see [reports/SE3/weekly_report.md](reports/SE3/weekly_report.md)
-
 See quick stats: [reports/SE3/da_vs_imbalance_stats.md](reports/SE3/da_vs_imbalance_stats.md)
+
+### Day-ahead price — SE4 · May 2025
+<img alt="SE4 DA price — May 2025" src="reports/SE4/da_price.png" width="640">
+
+See quick stats: [reports/SE4/da_price_stats.md](reports/SE4/da_price_stats.md)
+
+### SE4 − SE3 day-ahead spread — May 2025
+<img alt="SE4 − SE3 DA spread — May 2025" src="reports/SE3_SE4/da_spread.png" width="640">
+
+See quick stats: [reports/SE3_SE4/da_spread_stats.md](reports/SE3_SE4/da_spread_stats.md)
 
 
 ## Using your own CSV (real data)
