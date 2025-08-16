@@ -23,6 +23,7 @@ python src\fetch_imbalance.py --area SE3 --start 2025-05-01 --end 2025-05-31 --o
 REM Heatmaps + quick stats
 python src\make_heatmaps.py --input data\SE3.parquet --out reports
 ```
+**One-click rebuilds (Windows):** run `run_all_SE3.bat` or `run_all_SE4.bat` to regenerate all charts and stats.
 
 ## Outputs 
 
