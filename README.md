@@ -85,6 +85,22 @@ See summary: [reports/SE3/rebid_accept_summary.md](reports/SE3/rebid_accept_summ
 
 What’s inside: per-day DA/Imbalance means & std, correlation, # of big deviation hours (|Imb−DA| > 50 €/MWh), p95 abs spread, max/min spread.
 
+### Battery-lite DA arbitrage
+
+#### SE3
+<img alt="SE3 battery PnL" src="reports/SE3/battery_pnl.png" width="640">
+
+See stats: [reports/SE3/battery_stats.md](reports/SE3/battery_stats.md)
+
+#### SE4
+<img alt="SE4 battery PnL" src="reports/SE4/battery_pnl.png" width="640">
+
+Assumptions: 10 MWh cap, 5 MW power, 90% round-trip efficiency; simple DA-only rule; no fees.
+
+See stats: [reports/SE4/battery_stats.md](reports/SE4/battery_stats.md)
+
+**Schedule CSV (optional):** `reports/<ZONE>/battery_schedule.csv` *(coming soon)*
+
 
 ## Using your own CSV (real data)
 Convert any CSV to this repo’s schema, then build charts.
