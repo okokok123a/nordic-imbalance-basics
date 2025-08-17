@@ -128,8 +128,10 @@ python src\make_heatmaps.py --input data\SE3_real.parquet --out reports\SE3
 
 **Releases:**  
 
+[v0.5.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.5.0-demo) ·
 [v0.4.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.4.0-demo) ·
 [v0.3.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.3.0-demo) ·
 [v0.2.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.2.0-demo) ·
 [v0.1.0](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.1.0)
+
 
