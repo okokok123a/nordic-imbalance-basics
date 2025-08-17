@@ -73,6 +73,9 @@ See quick stats: [reports/SE4/da_price_stats.md](reports/SE4/da_price_stats.md)
 
 See quick stats: [reports/SE3_SE4/da_spread_stats.md](reports/SE3_SE4/da_spread_stats.md)
 
+**Top moves (per day):** [reports/SE3_SE4/spread_monitor.csv](reports/SE3_SE4/spread_monitor.csv) · [summary](reports/SE3_SE4/spread_monitor.md)  
+Hourly join parquet: `reports/SE3_SE4/da_spread_hourly.parquet`.
+
 Weekly report (one-pager): [reports/SE4/weekly_report.md](reports/SE4/weekly_report.md)
 
 ### Rebid vs Accept — SE3 (May 2025)
