@@ -87,6 +87,10 @@ See summary: [reports/SE3/rebid_accept_summary.md](reports/SE3/rebid_accept_summ
 - CSV: [reports/SE3/ida_prepsheet.csv](reports/SE3/ida_prepsheet.csv)
 - One-pager: [reports/SE3/ida_prepsheet.md](reports/SE3/ida_prepsheet.md)
 
+### IDA Prep Sheet — SE4 (daily)
+- CSV: [reports/SE4/ida_prepsheet.csv](reports/SE4/ida_prepsheet.csv)
+- One-pager: [reports/SE4/ida_prepsheet.md](reports/SE4/ida_prepsheet.md)
+
 What’s inside: per-day DA/Imbalance means & std, correlation, # of big deviation hours (|Imb−DA| > 50 €/MWh), p95 abs spread, max/min spread.
 
 ### Battery-lite DA arbitrage
