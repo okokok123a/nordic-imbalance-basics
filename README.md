@@ -103,8 +103,9 @@ Assumptions: 10 MWh cap, 5 MW power, 90% round-trip efficiency; simple DA-only r
 
 See stats: [reports/SE4/battery_stats.md](reports/SE4/battery_stats.md)
 
-**Schedule CSV:** `reports/<ZONE>/battery_schedule.csv` *(coming soon)*
-
+**Schedule CSVs:**
+- SE3 → [reports/SE3/battery_schedule.csv](reports/SE3/battery_schedule.csv)
+- SE4 → [reports/SE4/battery_schedule.csv](reports/SE4/battery_schedule.csv)
 
 ## Using your own CSV (real data)
 Convert any CSV to this repo’s schema, then build charts.
