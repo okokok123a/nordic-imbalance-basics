@@ -185,3 +185,10 @@ python src\fetch_da_entsoe.py --area SE3 --start 2025-05-10 --end 2025-05-13 --o
 ## Releases
 
 - Latest: https://github.com/EmotionalTrader/nordic-imbalance-basics/releases
+
+## Quickstart: Day-Ahead via ENTSO-E
+1. Copy .env.example to .env and set ENTSOE_TOKEN.
+2. Fetch demo (SE3, 2 days):
+    python src\fetch_da_prices.py --zone SE3 --start 2025-08-15 --end 2025-08-17 --out data\SE3_da_api_demo.parquet
+3. Plot:
+    python src\plot_da_api.py --input data\SE3_da_api_demo.parquet --out reports\SE3\da_api_demo.png
