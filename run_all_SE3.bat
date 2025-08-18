@@ -1,32 +1,21 @@
 @echo off
 setlocal
 
-REM === Config (demo window) ===
-set START=2025-05-10
-set END=2025-05-13
-set AREA=SE3
+:: Prefer ENTSO-E API when token present. Safe no-op if token missing.
+findstr /c:"ENTSOE_TOKEN=" ".env" >nul 2>&1
+if %ERRORLEVEL%==0 (
+  set "ZONE=SE3"
+  for /f %%A in ('powershell -NoP -C "(Get-Date).AddDays(-2).ToString(\"yyyy-MM-dd\")"') do set "START=%%A"
+  for /f %%A in ('powershell -NoP -C "(Get-Date).ToString(\"yyyy-MM-dd\")"') do set "END=%%A"
 
-set DATA=data\DA_%AREA%_API.parquet
-set PLOT=reports\%AREA%\da_price_api.png
+  echo Using ENTSO-E API for %ZONE% from %START% to %END% ...
+  python src\fetch_da_prices.py --zone %ZONE% --start %START% --end %END% --out data\DA_%ZONE%_API_latest.parquet
+  if errorlevel 1 goto :eof
 
-mkdir reports\%AREA% 2> NUL
-
-echo Fetching DA via ENTSO-E for %AREA% %START%..%END% ...
-python src\fetch_da_entsoe.py --area %AREA% --start %START% --end %END% --out %DATA%
-if errorlevel 1 (
-  echo Fetch failed. Aborting.
-  exit /b 1
+  if not exist reports\%ZONE% mkdir reports\%ZONE%
+  python src\plot_da_api.py --input data\DA_%ZONE%_API_latest.parquet --out reports\%ZONE%\da_price_api.png
+) else (
+  echo ENTSOE_TOKEN not found in .env — skipping ENTSO-E fetch for SE3.
 )
-
-echo Plotting %AREA% -> %PLOT% ...
-python src\plot_da_api.py --input %DATA% --out %PLOT%
-if errorlevel 1 (
-  echo Plot failed. Aborting.
-  exit /b 1
-)
-
-echo Done. Wrote:
-echo   %DATA%
-echo   %PLOT%
 
 endlocal
