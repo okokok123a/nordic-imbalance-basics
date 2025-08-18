@@ -1,6 +1,8 @@
 # src/spread_monitor.py
-import argparse, os
+import argparse
+import os
 import pandas as pd
+
 
 def load_price_series(path, price_col="da_price_eur_mwh"):
     df = pd.read_parquet(path)
@@ -13,6 +15,7 @@ def load_price_series(path, price_col="da_price_eur_mwh"):
         raise ValueError(f"{path} missing column {price_col}")
     return df[[price_col]].rename(columns={price_col: "price"})
 
+
 def daily_top_moves(df_spread, n):
     d = df_spread.copy()
     d["date"] = d.index.date
@@ -20,12 +23,25 @@ def daily_top_moves(df_spread, n):
     out = []
     for day, g in d.groupby("date", sort=True):
         top = g.nlargest(n, "abs_spread")
-        top = top.assign(rank_abs=top["abs_spread"].rank(ascending=False, method="first").astype(int))
+        top = top.assign(
+            rank_abs=top["abs_spread"].rank(ascending=False, method="first").astype(int)
+        )
         out.append(top)
     if not out:
-        return pd.DataFrame(columns=["se4_eur_mwh","se3_eur_mwh","spread_eur_mwh","abs_spread","rank_abs"])
+        return pd.DataFrame(
+            columns=[
+                "se4_eur_mwh",
+                "se3_eur_mwh",
+                "spread_eur_mwh",
+                "abs_spread",
+                "rank_abs",
+            ]
+        )
     res = pd.concat(out).sort_index()
-    return res[["se4_eur_mwh", "se3_eur_mwh", "spread_eur_mwh", "abs_spread", "rank_abs"]]
+    return res[
+        ["se4_eur_mwh", "se3_eur_mwh", "spread_eur_mwh", "abs_spread", "rank_abs"]
+    ]
+
 
 def make_summary(df_spread):
     s = df_spread["spread_eur_mwh"]
@@ -38,6 +54,7 @@ def make_summary(df_spread):
         "max_spread": round(float(s.max()), 2),
         "min_spread": round(float(s.min()), 2),
     }
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -82,6 +99,7 @@ def main():
         f.write("\n".join(md))
 
     print(f"Wrote {csv_path} and spread_monitor.md\nHourly join saved to {hourly_path}")
+
 
 if __name__ == "__main__":
     main()

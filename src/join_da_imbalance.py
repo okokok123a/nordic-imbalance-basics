@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 TZ = "Europe/Stockholm"  # unify to one timezone for joining
 
+
 def read_parquet_tz(path: str | Path, tz: str) -> pd.DataFrame:
     df = pd.read_parquet(path)
     if df.index.name != "ts":
@@ -19,12 +20,15 @@ def read_parquet_tz(path: str | Path, tz: str) -> pd.DataFrame:
         df.index = df.index.tz_convert(tz)
     return df
 
+
 def main():
     ap = argparse.ArgumentParser(
         description="Join DA price with imbalance (price & volume) and plot scatter."
     )
     ap.add_argument("--da", required=True, help="Parquet with column da_price_eur_mwh")
-    ap.add_argument("--imb", required=True, help="Parquet with price_eur_mwh, imbalance_volume_mwh")
+    ap.add_argument(
+        "--imb", required=True, help="Parquet with price_eur_mwh, imbalance_volume_mwh"
+    )
     ap.add_argument("--out", required=True, help="Output folder (e.g., reports\\SE3)")
     ap.add_argument("--title", default="DA vs Imbalance price", help="Plot title")
     args = ap.parse_args()
@@ -46,7 +50,9 @@ def main():
     # Inner join on timestamp
     joined = imb[need_cols].join(da[["da_price_eur_mwh"]], how="inner").dropna()
     if joined.empty:
-        raise ValueError("No overlapping timestamps after join. Check timezones / ranges.")
+        raise ValueError(
+            "No overlapping timestamps after join. Check timezones / ranges."
+        )
 
     # Basic stats
     x = joined["da_price_eur_mwh"].to_numpy()
@@ -98,6 +104,7 @@ def main():
     md_path.write_text("\n".join(md), encoding="utf-8")
 
     print(f"Saved {png_path} and {md_path}")
+
 
 if __name__ == "__main__":
     main()

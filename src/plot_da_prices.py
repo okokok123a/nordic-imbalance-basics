@@ -4,9 +4,14 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
 def main():
     ap = argparse.ArgumentParser(description="Plot day-ahead price time series")
-    ap.add_argument("--input", required=True, help="Parquet with column da_price_eur_mwh, index tz-aware")
+    ap.add_argument(
+        "--input",
+        required=True,
+        help="Parquet with column da_price_eur_mwh, index tz-aware",
+    )
     ap.add_argument("--out", required=True, help="Output folder (e.g., reports\\SE3)")
     ap.add_argument("--title", default="")
     args = ap.parse_args()
@@ -53,6 +58,7 @@ def main():
             f.write(f"- {k}: {v}\n")
 
     print(f"Saved {out_png} and {out_md}")
+
 
 if __name__ == "__main__":
     main()

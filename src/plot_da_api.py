@@ -1,6 +1,8 @@
-import argparse, os
+import argparse
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 def main():
     p = argparse.ArgumentParser(description="Plot DA price from API parquet to PNG.")
@@ -16,15 +18,19 @@ def main():
 
     area = str(df.get("area", pd.Series(["?"])).iloc[0])
     start = df.index.min().strftime("%Y-%m-%d %H:%M UTC")
-    end   = df.index.max().strftime("%Y-%m-%d %H:%M UTC")
+    end = df.index.max().strftime("%Y-%m-%d %H:%M UTC")
 
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
-    plt.figure(figsize=(10,4))
+    plt.figure(figsize=(10, 4))
     plt.plot(df.index, df["da_price_eur_mwh"])
     plt.title(f"Day-ahead price — {area} — {start} → {end}")
-    plt.xlabel("Time (UTC)"); plt.ylabel("€/MWh")
-    plt.tight_layout(); plt.savefig(args.out, dpi=120); plt.close()
+    plt.xlabel("Time (UTC)")
+    plt.ylabel("€/MWh")
+    plt.tight_layout()
+    plt.savefig(args.out, dpi=120)
+    plt.close()
     print(f"OK: wrote plot {args.out}")
+
 
 if __name__ == "__main__":
     main()

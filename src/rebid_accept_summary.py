@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-import argparse, os
+import argparse
+import os
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+
 
 def load_parquet_ts(path):
     df = pd.read_parquet(path)
@@ -16,6 +17,7 @@ def load_parquet_ts(path):
     if df.index.tz is not None:
         df.index = df.index.tz_convert("Europe/Stockholm").tz_localize(None)
     return df.sort_index()
+
 
 def safe_join(da_path, imb_path):
     da = load_parquet_ts(da_path).copy()
@@ -37,12 +39,12 @@ def safe_join(da_path, imb_path):
         imb.index = imb.index.tz_convert("Europe/Stockholm").tz_localize(None)
 
     j = da[["da_price_eur_mwh"]].join(
-        imb[["price_eur_mwh", "imbalance_volume_mwh"]],
-        how="inner"
+        imb[["price_eur_mwh", "imbalance_volume_mwh"]], how="inner"
     )
     j = j.rename(columns={"price_eur_mwh": "imb_price_eur_mwh"})
     j["spread_eur_mwh"] = j["imb_price_eur_mwh"] - j["da_price_eur_mwh"]
     return j
+
 
 def make_summary_md(df, title, outdir):
     corr = df["imb_price_eur_mwh"].corr(df["da_price_eur_mwh"])
@@ -51,14 +53,22 @@ def make_summary_md(df, title, outdir):
     n = len(df)
 
     # Hour-of-day median |spread|
-    hour_med = (df["spread_eur_mwh"].abs()
-                .groupby(df.index.hour).median()
-                .sort_values(ascending=False))
+    hour_med = (
+        df["spread_eur_mwh"]
+        .abs()
+        .groupby(df.index.hour)
+        .median()
+        .sort_values(ascending=False)
+    )
 
     # Weekday median |spread| (0=Mon)
-    dow_med = (df["spread_eur_mwh"].abs()
-               .groupby(df.index.dayofweek).median()
-               .sort_values(ascending=False))
+    dow_med = (
+        df["spread_eur_mwh"]
+        .abs()
+        .groupby(df.index.dayofweek)
+        .median()
+        .sort_values(ascending=False)
+    )
 
     md = []
     md.append(f"# {title}")
@@ -76,14 +86,17 @@ def make_summary_md(df, title, outdir):
     for d, v in dow_med.head(6).items():
         md.append(f"- **{d}** → {v:.2f} €/MWh")
     md.append("")
-    md.append("_Interpretation: bigger median |spread| means more deviation risk at that hour/weekday → you’re more likely to **rebid** vs accept._")
+    md.append(
+        "_Interpretation: bigger median |spread| means more deviation risk at that hour/weekday → you’re more likely to **rebid** vs accept._"
+    )
     out_md = os.path.join(outdir, "rebid_accept_summary.md")
     with open(out_md, "w", encoding="utf-8") as f:
         f.write("\n".join(md))
     return out_md, hour_med
 
+
 def plot_hour_bars(hour_med, title, outdir):
-    fig, ax = plt.subplots(figsize=(8,4.5))
+    fig, ax = plt.subplots(figsize=(8, 4.5))
     hour_med.sort_index().plot(kind="bar", ax=ax)
     ax.set_title(f"{title} — median |imb − DA| by hour")
     ax.set_xlabel("Hour of day")
@@ -94,10 +107,21 @@ def plot_hour_bars(hour_med, title, outdir):
     plt.close(fig)
     return out_png
 
+
 def main():
-    p = argparse.ArgumentParser(description="Rebid vs Accept cheat-sheet: join DA & imbalance, summarize spread risk.")
-    p.add_argument("--da", required=True, help="Parquet with DA prices (index ts, column da_price_eur_mwh)")
-    p.add_argument("--imb", required=True, help="Parquet with imbalance data (index ts, column price_eur_mwh)")
+    p = argparse.ArgumentParser(
+        description="Rebid vs Accept cheat-sheet: join DA & imbalance, summarize spread risk."
+    )
+    p.add_argument(
+        "--da",
+        required=True,
+        help="Parquet with DA prices (index ts, column da_price_eur_mwh)",
+    )
+    p.add_argument(
+        "--imb",
+        required=True,
+        help="Parquet with imbalance data (index ts, column price_eur_mwh)",
+    )
     p.add_argument("--out", required=True, help="Output folder (will be created)")
     p.add_argument("--title", default="Rebid vs Accept — SE3 (May 2025)")
     args = p.parse_args()
@@ -107,6 +131,7 @@ def main():
     md_path, hour_med = make_summary_md(df, args.title, args.out)
     png_path = plot_hour_bars(hour_med, args.title, args.out)
     print(f"Saved {md_path} and {png_path}")
+
 
 if __name__ == "__main__":
     main()

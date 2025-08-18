@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import argparse, os
+import argparse
+import os
 from pathlib import Path
 import pandas as pd
 from entsoe import EntsoePandasClient
@@ -8,8 +9,11 @@ from dotenv import load_dotenv
 # Map friendly names to entsoe-py bidding zone codes
 ZMAP = {"SE3": "SE_3", "SE4": "SE_4", "FI": "FI"}
 
+
 def main():
-    ap = argparse.ArgumentParser(description="Fetch ENTSO-E day-ahead prices and save to Parquet.")
+    ap = argparse.ArgumentParser(
+        description="Fetch ENTSO-E day-ahead prices and save to Parquet."
+    )
     ap.add_argument("--zone", required=True, help="SE3 | SE4 | FI")
     ap.add_argument("--start", required=True, help="YYYY-MM-DD")
     ap.add_argument("--end", required=True, help="YYYY-MM-DD (exclusive)")
@@ -35,6 +39,7 @@ def main():
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     df.to_parquet(args.out)
     print(f"Wrote {len(df):,} rows -> {args.out}")
+
 
 if __name__ == "__main__":
     main()

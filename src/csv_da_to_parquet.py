@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 import re
 
+
 def find_col(cols, *patterns):
     pats = [re.compile(p, re.I) for p in patterns]
     for c in cols:
@@ -12,8 +13,11 @@ def find_col(cols, *patterns):
                 return c
     return None
 
+
 def main():
-    ap = argparse.ArgumentParser(description="Convert ENTSO-E Energy Prices CSV -> Parquet")
+    ap = argparse.ArgumentParser(
+        description="Convert ENTSO-E Energy Prices CSV -> Parquet"
+    )
     ap.add_argument("--csv", required=True)
     ap.add_argument("--zone", required=True, help="SE3 | SE4 | FI")
     ap.add_argument("--out", required=True)
@@ -23,7 +27,7 @@ def main():
     df = pd.read_csv(args.csv, sep=None, engine="python")
 
     # Detect likely columns from the new portal
-    time_col  = find_col(df.columns, r"MTU", r"Time", r"Date")
+    time_col = find_col(df.columns, r"MTU", r"Time", r"Date")
     price_col = find_col(df.columns, r"price", r"eur.?/mwh", r"EUR/MWh")
 
     if time_col is None or price_col is None:
@@ -47,6 +51,7 @@ def main():
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     out.to_parquet(args.out)
     print(f"Wrote {len(out):,} rows -> {args.out}")
+
 
 if __name__ == "__main__":
     main()

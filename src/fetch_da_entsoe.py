@@ -20,11 +20,13 @@ PROC_TYPE = "A01"  # Day-ahead
 TZ_BY_AREA = {
     "SE3": "Europe/Stockholm",
     "SE4": "Europe/Stockholm",
-    "FI":  "Europe/Helsinki",
+    "FI": "Europe/Helsinki",
 }
+
 
 def _ymd_to_period(dt: datetime) -> str:
     return dt.strftime("%Y%m%d%H%M")  # UTC yyyymmddHHMM
+
 
 def _to_utc_day_range(start_str: str, end_str: str):
     # Build UTC day-boundaries for the API; we'll clamp to local later.
@@ -32,12 +34,14 @@ def _to_utc_day_range(start_str: str, end_str: str):
     e = datetime.fromisoformat(end_str).replace(tzinfo=timezone.utc)
     return _ymd_to_period(s), _ymd_to_period(e)
 
+
 def _resolution_to_timedelta(res: str) -> timedelta:
     if res == "PT60M":
         return timedelta(hours=1)
     if res == "PT15M":
         return timedelta(minutes=15)
     raise ValueError(f"Unsupported resolution: {res}")
+
 
 def _polite_get(url: str, params: dict, max_tries: int = 5) -> str:
     backoff = 1.0
@@ -53,6 +57,7 @@ def _polite_get(url: str, params: dict, max_tries: int = 5) -> str:
         raise RuntimeError(f"ENTSO-E HTTP {r.status_code}: {r.text[:400]}")
     raise RuntimeError(f"ENTSO-E retry limit reached; last status {r.status_code if r else 'n/a'}")
 
+
 def _parse_price_xml(xml_text: str) -> pd.DataFrame:
     root = etree.fromstring(xml_text.encode("utf-8"))
     ns = {"ns": root.nsmap.get(None)}  # default namespace
@@ -61,9 +66,9 @@ def _parse_price_xml(xml_text: str) -> pd.DataFrame:
     for ts in root.findall(".//ns:TimeSeries", namespaces=ns):
         for period in ts.findall("./ns:Period", namespaces=ns):
             start_text = period.findtext("./ns:timeInterval/ns:start", namespaces=ns)
-            end_text   = period.findtext("./ns:timeInterval/ns:end", namespaces=ns)
+            end_text = period.findtext("./ns:timeInterval/ns:end", namespaces=ns)
             start = datetime.fromisoformat(start_text.replace("Z", "+00:00"))
-            end   = datetime.fromisoformat(end_text.replace("Z", "+00:00"))
+            end = datetime.fromisoformat(end_text.replace("Z", "+00:00"))
             step = _resolution_to_timedelta(period.findtext("./ns:resolution", namespaces=ns) or "PT60M")
 
             n = int((end - start) / step)
@@ -88,6 +93,7 @@ def _parse_price_xml(xml_text: str) -> pd.DataFrame:
         df.index = df.index.tz_convert("UTC")
     return df
 
+
 def main():
     p = argparse.ArgumentParser(description="Fetch ENTSO-E Day-Ahead prices (bidding zone) to Parquet.")
     p.add_argument("--area", required=True, choices=sorted(EIC_BY_AREA.keys()))
@@ -105,11 +111,11 @@ def main():
     params = {
         "securityToken": token,
         "documentType": DOC_TYPE,   # "A44"
-        "processType":  PROC_TYPE,  # "A01"
-        "in_Domain":    eic,
-        "out_Domain":   eic,        # required for DA prices
-        "periodStart":  periodStart,
-        "periodEnd":    periodEnd,
+        "processType": PROC_TYPE,  # "A01"
+        "in_Domain": eic,
+        "out_Domain": eic,        # required for DA prices
+        "periodStart": periodStart,
+        "periodEnd": periodEnd,
     }
 
     if args.dry_run:
@@ -134,7 +140,7 @@ def main():
     tz_name = TZ_BY_AREA.get(args.area, "UTC")
     local_tz = ZoneInfo(tz_name)
     start_local = pd.Timestamp(args.start).tz_localize(local_tz)
-    end_local   = pd.Timestamp(args.end).tz_localize(local_tz)
+    end_local = pd.Timestamp(args.end).tz_localize(local_tz)
     idx_local = df.index.tz_convert(local_tz)
     mask = (idx_local >= start_local) & (idx_local < end_local)
     df = df.loc[mask].sort_index()
@@ -144,6 +150,7 @@ def main():
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     df.to_parquet(args.out)
     print(f"OK: wrote {len(df)} rows to {args.out}")
+
 
 if __name__ == "__main__":
     main()

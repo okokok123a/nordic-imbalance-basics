@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-import argparse, os
+import argparse
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 def read_da(path: str) -> pd.Series:
     df = pd.read_parquet(path)
@@ -12,8 +14,11 @@ def read_da(path: str) -> pd.Series:
     s.index.name = "ts"
     return s.sort_index()
 
+
 def main():
-    ap = argparse.ArgumentParser(description="Plot DA spread between two zones and write quick stats.")
+    ap = argparse.ArgumentParser(
+        description="Plot DA spread between two zones and write quick stats."
+    )
     ap.add_argument("--a", required=True, help="Parquet A (e.g., SE4)")
     ap.add_argument("--b", required=True, help="Parquet B (e.g., SE3)")
     ap.add_argument("--out", required=True, help="Output folder (will be created)")
@@ -27,10 +32,10 @@ def main():
 
     # align on common timestamps
     df = pd.DataFrame({"A": a, "B": b}).dropna().sort_index()
-    df["spread"] = df["A"] - df["B"]   # A minus B
+    df["spread"] = df["A"] - df["B"]  # A minus B
 
     # plot
-    fig = plt.figure(figsize=(10,4.2))
+    fig = plt.figure(figsize=(10, 4.2))
     ax = fig.gca()
     df["spread"].plot(ax=ax)
     ax.axhline(0, lw=1, ls="--")
@@ -61,6 +66,7 @@ def main():
             f.write(f"- **{k}**: {v:.2f}\n")
 
     print(f"Saved {out_png} and {out_md}")
+
 
 if __name__ == "__main__":
     main()
