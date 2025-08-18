@@ -176,3 +176,8 @@ python src\fetch_da_entsoe.py --area SE3 --start 2025-05-10 --end 2025-05-13 --o
 [v0.1.0](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.1.0)
 
 
+
+## Secrets / ENTSO-E token
+
+- Copy `.env.example` to `.env` and set your token: `ENTSOE_TOKEN=...`
+- `.env` is ignored by git; never commit real tokens.
