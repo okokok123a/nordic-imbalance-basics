@@ -126,6 +126,12 @@ python src\make_heatmaps.py --input data\SE3_real.parquet --out reports\SE3
 
 ---
 
+## ENTSO-E REST API — token & dry-run
+
+**Currently under development."" - I am awating ****Restful API access** from ENTSO-E Transparency Platform 
+
+---
+
 **Releases:**  
 
 [v0.5.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.5.0-demo) ·
