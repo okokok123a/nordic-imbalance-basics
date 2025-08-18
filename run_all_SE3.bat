@@ -1,4 +1,24 @@
 @echo off
+REM === Optional: ENTSO-E API fetch if token present =========================
+REM Load .env into environment (safe when it only has simple KEY=VALUE lines)
+if exist ".env" (
+  for /f "usebackq delims=" %%x in (".env") do set %%x
+)
+
+if defined ENTSOE_TOKEN (
+  echo [INFO] ENTSOE_TOKEN found — fetching SE3 DA via ENTSO-E API...
+  ".venv\Scripts\python.exe" src\fetch_da_entsoe.py ^
+    --area SE3 ^
+    --start 2025-05-01 ^
+    --end   2025-06-01 ^
+    --out   data\DA_SE3_API.parquet
+) else (
+  echo [INFO] No ENTSOE_TOKEN — skipping ENTSO-E fetch (using existing CSV path).
+)
+REM ==========================================================================
+
+
+@echo off
 setlocal
 call .venv\Scripts\activate
 
