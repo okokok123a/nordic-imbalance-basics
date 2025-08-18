@@ -160,36 +160,70 @@ Prints the exact endpoint with your token redacted.
 python src\fetch_da_entsoe.py --area SE3 --start 2025-05-10 --end 2025-05-13 --out data\DA_SE3_API.parquet --dry-run
 ```
 
-**Notes**
-- "--end" is exclusive (e.g., 10..13 = 72 hours).
-- Times are UTC internally; results are clamped to the area’s local day (Europe/Stockholm). 
-- Areas supported now: SE3, SE4 (EICs wired in src/eic_codes.py). FI support can be added later.
+### Imbalance via ENTSO-E (A85)
+
+Prerequisite: create `.env` and set `ENTSOE_TOKEN=YOUR-REAL-TOKEN`. Do not commit `.env`.
+
+Fetch imbalance prices for SE3 and write a join-compatible parquet:
+
+```bat
+python src\fetch_imbalance_entsoe.py --area SE3 --start 2025-08-18 --end 2025-08-19 --out data\SE3_imbalance.parquet
+```
+
+Make the DA vs Imbalance plot (uses your latest DA parquet):
+
+```bat
+python src\join_da_imbalance.py --da data\DA_SE3_API_latest.parquet --imb data\SE3_imbalance.parquet --out reports\SE3 --title "SE3 - DA vs Imbalance (API)"
+```
+
+**Output parquet schema (join-compatible)**
+
+```
+index:   ts_utc (UTC)
+columns: price_eur_mwh, imbalance_volume_mwh
+```
+
+**Notes (Imbalance)**
+
+* A85 uses the control-area EIC (not the bidding-zone EIC).
+* Sweden (SE3 and SE4) control-area EIC: `10YSE-1--------K` (Svk).
+* If ENTSO-E returns "No matching data" for the chosen window, the script still writes a join-compatible empty parquet so the pipeline and plots do not break.
+* For SE4, change `--area SE3` to `--area SE4`.
+* `--end` is exclusive; times are handled in UTC.
+
+**Notes (Day-Ahead)**
+
+* `--end` is exclusive (e.g., 10..13 = 72 hours).
+* Times are UTC internally; results are clamped to the area’s local day (Europe/Stockholm).
+* Areas supported now: SE3, SE4 (EICs wired in `src/eic_map.py`). FI support can be added later.
 
 ---
 
-**Releases:**  
-
-[v0.5.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.5.0-demo) ·
-[v0.4.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.4.0-demo) ·
-[v0.3.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.3.0-demo) ·
-[v0.2.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.2.0-demo) ·
-[v0.1.0](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.1.0)
-
-
+## Releases
+- Latest: https://github.com/EmotionalTrader/nordic-imbalance-basics/releases
+- Older demo tags:
+  [v0.5.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.5.0-demo) ·
+  [v0.4.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.4.0-demo) ·
+  [v0.3.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.3.0-demo) ·
+  [v0.2.0-demo](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.2.0-demo) ·
+  [v0.1.0](https://github.com/EmotionalTrader/nordic-imbalance-basics/releases/tag/v0.1.0)
 
 ## Secrets / ENTSO-E token
-
 - Copy `.env.example` to `.env` and set your token: `ENTSOE_TOKEN=...`
 - `.env` is ignored by git; never commit real tokens.
 
-## Releases
-
-- Latest: https://github.com/EmotionalTrader/nordic-imbalance-basics/releases
-
 ## Quickstart: Day-Ahead via ENTSO-E
-1. Copy .env.example to .env and set ENTSOE_TOKEN.
-2. Fetch demo (SE3, 2 days):
-    python src\fetch_da_prices.py --zone SE3 --start 2025-08-15 --end 2025-08-17 --out data\SE3_da_api_demo.parquet
-3. Plot:
-    python src\plot_da_api.py --input data\SE3_da_api_demo.parquet --out reports\SE3\da_api_demo.png
-- run_all_SE3.bat and run_all_SE4.bat auto-fetch last 2 days via ENTSO-E when .env has ENTSOE_TOKEN.
+1) Copy `.env.example` to `.env` and set `ENTSOE_TOKEN`.
+2) Fetch demo (SE3, 2 days):
+```bat
+python src\fetch_da_entsoe.py --area SE3 --start 2025-08-15 --end 2025-08-17 --out data\DA_SE3_API_demo.parquet
+```
+3) Plot:
+```bat
+python src\plot_da_api.py --input data\DA_SE3_API_demo.parquet --out reports\SE3\da_api_demo.png
+```
+One-click (Windows):
+```bat
+run_all_SE3.bat
+run_all_SE4.bat
+```
