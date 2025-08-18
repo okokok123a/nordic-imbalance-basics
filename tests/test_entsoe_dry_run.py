@@ -31,3 +31,11 @@ def test_se4_dry_run_url():
     assert "processType=A01" in out
     assert "in_Domain=10Y1001A1001A47J" in out
     assert "out_Domain=10Y1001A1001A47J" in out
+
+def test_fi_dry_run_url():
+    out = _run_dry("FI")
+    assert "documentType=A44" in out
+    assert "processType=A01" in out
+    assert "in_Domain=10YFI-1--------U" in out
+    assert "out_Domain=10YFI-1--------U" in out
+
