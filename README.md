@@ -192,3 +192,4 @@ python src\fetch_da_entsoe.py --area SE3 --start 2025-05-10 --end 2025-05-13 --o
     python src\fetch_da_prices.py --zone SE3 --start 2025-08-15 --end 2025-08-17 --out data\SE3_da_api_demo.parquet
 3. Plot:
     python src\plot_da_api.py --input data\SE3_da_api_demo.parquet --out reports\SE3\da_api_demo.png
+- run_all_SE3.bat and run_all_SE4.bat auto-fetch last 2 days via ENTSO-E when .env has ENTSOE_TOKEN.
