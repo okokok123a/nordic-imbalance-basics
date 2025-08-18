@@ -16,10 +16,18 @@ API_BASE = "https://web-api.tp.entsoe.eu/api"
 DOC_TYPE = "A44"   # Price document
 PROC_TYPE = "A01"  # Day-ahead
 
+# Local timezones per bidding zone (for clamping the local-day window)
+TZ_BY_AREA = {
+    "SE3": "Europe/Stockholm",
+    "SE4": "Europe/Stockholm",
+    "FI":  "Europe/Helsinki",
+}
+
 def _ymd_to_period(dt: datetime) -> str:
     return dt.strftime("%Y%m%d%H%M")  # UTC yyyymmddHHMM
 
 def _to_utc_day_range(start_str: str, end_str: str):
+    # Build UTC day-boundaries for the API; we'll clamp to local later.
     s = datetime.fromisoformat(start_str).replace(tzinfo=timezone.utc)
     e = datetime.fromisoformat(end_str).replace(tzinfo=timezone.utc)
     return _ymd_to_period(s), _ymd_to_period(e)
@@ -51,20 +59,22 @@ def _parse_price_xml(xml_text: str) -> pd.DataFrame:
     records = []
 
     for ts in root.findall(".//ns:TimeSeries", namespaces=ns):
-        for period in ts.findall(".//ns:Period", namespaces=ns):
+        for period in ts.findall("./ns:Period", namespaces=ns):
             start_text = period.findtext("./ns:timeInterval/ns:start", namespaces=ns)
             end_text   = period.findtext("./ns:timeInterval/ns:end", namespaces=ns)
             start = datetime.fromisoformat(start_text.replace("Z", "+00:00"))
             end   = datetime.fromisoformat(end_text.replace("Z", "+00:00"))
             step = _resolution_to_timedelta(period.findtext("./ns:resolution", namespaces=ns) or "PT60M")
 
-            timeline = [start + i * step for i in range(int((end - start) / step))]  # 1-based
+            n = int((end - start) / step)
+            timeline = [start + i * step for i in range(n)]  # 1-based positions
 
             for point in period.findall("./ns:Point", namespaces=ns):
-                pos = int(point.findtext("./ns:position", namespaces=ns))
+                pos_text = point.findtext("./ns:position", namespaces=ns)
                 price_text = point.findtext("./ns:price.amount", namespaces=ns)
-                if price_text is None:
+                if not pos_text or price_text is None:
                     continue
+                pos = int(pos_text)
                 ts_utc = timeline[pos - 1]
                 records.append((ts_utc, float(price_text)))
 
@@ -81,8 +91,8 @@ def _parse_price_xml(xml_text: str) -> pd.DataFrame:
 def main():
     p = argparse.ArgumentParser(description="Fetch ENTSO-E Day-Ahead prices (bidding zone) to Parquet.")
     p.add_argument("--area", required=True, choices=sorted(EIC_BY_AREA.keys()))
-    p.add_argument("--start", required=True, help="YYYY-MM-DD (UTC day start)")
-    p.add_argument("--end", required=True, help="YYYY-MM-DD (UTC day start, exclusive)")
+    p.add_argument("--start", required=True, help="YYYY-MM-DD (local day start)")
+    p.add_argument("--end", required=True, help="YYYY-MM-DD (local day start, exclusive)")
     p.add_argument("--out", required=True, help=r"Output Parquet path, e.g. data\DA_SE3_API.parquet")
     p.add_argument("--dry-run", action="store_true", help="Print the request URL and exit (no network call).")
     args = p.parse_args()
@@ -94,9 +104,10 @@ def main():
     periodStart, periodEnd = _to_utc_day_range(args.start, args.end)
     params = {
         "securityToken": token,
-        "documentType": DOC_TYPE,
-        "processType":  PROC_TYPE,
+        "documentType": DOC_TYPE,   # "A44"
+        "processType":  PROC_TYPE,  # "A01"
         "in_Domain":    eic,
+        "out_Domain":   eic,        # required for DA prices
         "periodStart":  periodStart,
         "periodEnd":    periodEnd,
     }
@@ -117,6 +128,17 @@ def main():
         raise RuntimeError("No data returned for the requested window.")
     if df["da_price_eur_mwh"].isna().any():
         raise RuntimeError("Missing prices detected.")
+
+    # --- Clamp to requested local date window (per area timezone) ---
+    from zoneinfo import ZoneInfo
+    tz_name = TZ_BY_AREA.get(args.area, "UTC")
+    local_tz = ZoneInfo(tz_name)
+    start_local = pd.Timestamp(args.start).tz_localize(local_tz)
+    end_local   = pd.Timestamp(args.end).tz_localize(local_tz)
+    idx_local = df.index.tz_convert(local_tz)
+    mask = (idx_local >= start_local) & (idx_local < end_local)
+    df = df.loc[mask].sort_index()
+    # ----------------------------------------------------------------
 
     df["area"] = args.area
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
