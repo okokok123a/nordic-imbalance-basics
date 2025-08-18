@@ -132,7 +132,38 @@ python src\make_heatmaps.py --input data\SE3_real.parquet --out reports\SE3
 
 ## ENTSO-E REST API — token & dry-run
 
-**Currently under development."" - I am awating ****Restful API access** from ENTSO-E Transparency Platform 
+**What this does:** fetches day-ahead prices for SE3/SE4 straight from ENTSO-E, saves to Parquet, and (optionally) plots a PNG.
+
+**1) Token (once)**
+- In your Transparency Platform account: *My Account Settings → Web API Security Token → Generate new token*.
+- Save locally in `.env` (never commit):ENTSOE_TOKEN=YOUR-REAL-TOKEN
+
+
+
+**2) Fetch & plot (example window)**
+```bat
+call .venv\Scripts\activate
+python src\fetch_da_entsoe.py --area SE3 --start 2025-05-10 --end 2025-05-13 --out data\DA_SE3_API.parquet
+python src\plot_da_api.py --input data\DA_SE3_API.parquet --out reports\SE3\da_price_api.png
+```
+
+
+**3) One-click (Windows)**
+```bat
+run_all_SE3.bat
+run_all_SE4.bat
+```
+
+**Dry-run (no token needed)**
+Prints the exact endpoint with your token redacted.
+```bat
+python src\fetch_da_entsoe.py --area SE3 --start 2025-05-10 --end 2025-05-13 --out data\DA_SE3_API.parquet --dry-run
+```
+
+**Notes**
+- "--end" is exclusive (e.g., 10..13 = 72 hours).
+- Times are UTC internally; results are clamped to the area’s local day (Europe/Stockholm). 
+- Areas supported now: SE3, SE4 (EICs wired in src/eic_codes.py). FI support can be added later.
 
 ---
 
