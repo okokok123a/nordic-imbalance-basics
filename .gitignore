@@ -9,3 +9,5 @@ Thumbs.db
 desktop.ini
 reports/SE3_SE4/da_spread_hourly.parquet
 .env
+
+entsoe_cache.sqlite
