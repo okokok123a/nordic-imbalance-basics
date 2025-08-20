@@ -14,6 +14,17 @@ No token needed — uses a tiny sample XML in `tests/fixtures/`.
 ```bash
 python src/fetch_a85_entsoe.py --area SE3 --start 2025-01-10 --end 2025-01-11 --out data/SE3_A85_fixture.parquet --use-fixture
 ```
+### A85 quickstart (live API)
+1) Create a local `.env` (not committed) with `ENTSOE_TOKEN=...`  
+2) Run (UTC, end-exclusive):
+
+```bash
+python src/fetch_a85_entsoe.py --area SE3 --start 2025-01-10 --end 2025-01-11 --out data/SE3_A85_20250110.parquet
+```
+Notes:
+- Day-Ahead uses Bidding Zone EIC; A85 uses Control Area EIC. IDs live in `src/eic_map.py`.
+- Timestamps are UTC; `--end` is exclusive.
+- On “no data” or any error the CLI writes an empty Parquet with the right columns.
 
 ## Status — 2025-08-19
 
