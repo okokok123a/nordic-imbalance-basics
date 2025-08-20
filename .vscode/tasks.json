@@ -1,0 +1,20 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run SE3 one-click",
+      "type": "shell",
+      "command": "call .venv\\Scripts\\activate && run_all_SE3.bat",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "Run SE4 one-click",
+      "type": "shell",
+      "command": "call .venv\\Scripts\\activate && run_all_SE4.bat",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    }
+  ]
+}
