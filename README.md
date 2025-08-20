@@ -92,6 +92,12 @@ See quick stats: [reports/stats.md](reports/stats.md)
 
 See quick stats: [reports/SE3/da_vs_imbalance_stats.md](reports/SE3/da_vs_imbalance_stats.md)
 
+**API (live fetch) version**  
+<img alt="SE3: DA vs Imbalance price — API" src="reports/SE3/da_vs_imbalance_api.png" width="640">
+
+See quick stats: [reports/SE3/da_vs_imbalance_api_stats.md](reports/SE3/da_vs_imbalance_api_stats.md)
+
+
 ### Day-ahead price — SE4 · May 2025
 <img alt="SE4 DA price — May 2025" src="reports/SE4/da_price.png" width="640">
 
