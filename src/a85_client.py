@@ -40,3 +40,22 @@ def build_a85_params(
         "periodStart": to_entsoe_period(start_utc),
         "periodEnd": to_entsoe_period(end_utc),
     }
+# --- Raw HTTP call (no retries yet) ------------------------------------------
+from typing import Dict
+import requests
+from requests.exceptions import HTTPError
+
+def fetch_raw_a85_xml(control_area_eic: str, start_utc: datetime, end_utc: datetime) -> str:
+    """
+    Call ENTSO-E REST for A85 (imbalance price) and return raw XML text.
+    NOTE: No retries/caching here; that comes later.
+    """
+    params: Dict[str, str] = build_a85_params(control_area_eic, start_utc, end_utc)
+    resp = requests.get(API_URL, params=params, timeout=30)
+    try:
+        resp.raise_for_status()
+    except HTTPError as e:
+        # Don't leak the token in logs
+        safe_params = {k: v for k, v in params.items() if k != "securityToken"}
+        raise RuntimeError(f"ENTSO-E A85 request failed: {e}; params={safe_params}") from e
+    return resp.text
