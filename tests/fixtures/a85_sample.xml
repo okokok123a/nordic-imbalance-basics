@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GL_MarketDocument xmlns="urn:entsoe.eu:wgedi:gl-marketdocument:5:0">
+  <mRID>TEST-A85-SE-2025-01-10</mRID>
+  <type>A85</type>
+  <createdDateTime>2025-01-10T12:00Z</createdDateTime>
+  <TimeSeries>
+    <mRID>TS1</mRID>
+    <businessType>A85</businessType>
+    <in_Area>
+      <mRID codingScheme="A01">10YSE-1--------K</mRID>
+    </in_Area>
+    <Period>
+      <timeInterval>
+        <start>2025-01-10T00:00Z</start>
+        <end>2025-01-10T01:00Z</end>
+      </timeInterval>
+      <resolution>PT15M</resolution>
+      <Point><position>1</position><price.amount>35.12</price.amount></Point>
+      <Point><position>2</position><price.amount>40.00</price.amount></Point>
+      <Point><position>3</position><price.amount>-5.00</price.amount></Point>
+      <Point><position>4</position><price.amount>55.25</price.amount></Point>
+    </Period>
+  </TimeSeries>
+</GL_MarketDocument>
