@@ -8,6 +8,13 @@ Fetch, tidy, and visualize Nordic (SE3/SE4/FI) **imbalance prices & volumes** wi
 > **Open-source only (from 2025-08-20):** New code is authored manually using standard open-source libraries (requests/entsoe-py, lxml, pandas, matplotlib, etc.).  
 > **No LLMs at runtime.** See `docs/PROVENANCE.md` for the history and policy.
 
+### A85 quickstart (offline fixture)
+No token needed — uses a tiny sample XML in `tests/fixtures/`.
+
+```bash
+python src/fetch_a85_entsoe.py --area SE3 --start 2025-01-10 --end 2025-01-11 --out data/SE3_A85_fixture.parquet --use-fixture
+```
+
 ## Status — 2025-08-19
 
 - ✅ **DA (A44)** via ENTSO-E REST is **live** → tidy Parquet  secrets in (`.env`).
