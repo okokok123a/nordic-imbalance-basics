@@ -34,14 +34,6 @@ Notes:
 - ℹ️ Outputs target **15-minute granularity** (Nordic ISP), with one-click Windows rebuilds.
 
 
-## Status — 2025-08-19
-
-- ✅ **DA (A44)** via ENTSO-E REST is **live** → tidy Parquet  secrets in (`.env`).
-- 🟡 **Imbalance (A85)** fetcher is **scaffolded**; the **demo uses converted CSVs** for now.
-- ➡️ **Next:** wire A85 **XML→Parquet** for **SE3/SE4**, then extend to **FI** and update the joins/plots.
-- ℹ️ Outputs target **15-minute granularity** (Nordic ISP), with one-click Windows rebuilds.
-
-
 ## What’s inside
 - `data/` – tidy Parquet extracts (prices/volumes)
 - `src/` – small Python CLIs to **fetch** and **plot**
