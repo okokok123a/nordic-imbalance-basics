@@ -5,6 +5,35 @@ Fetch, tidy, and visualize Nordic (SE3/SE4/FI) **imbalance prices & volumes** wi
 
 > **Why this exists:** Imbalance exposure drives intraday/VPP decisions. This repo cleans Nordic imbalance data (demo for now) and gives fast visuals to decide when to rebid vs accept deviation.
 
+> **Open-source only (from 2025-08-20):** New code is authored manually using standard open-source libraries (requests/entsoe-py, lxml, pandas, matplotlib, etc.).  
+> **No LLMs at runtime.** See `docs/PROVENANCE.md` for the history and policy.
+
+### A85 quickstart (offline fixture)
+No token needed — uses a tiny sample XML in `tests/fixtures/`.
+
+```bash
+python src/fetch_a85_entsoe.py --area SE3 --start 2025-01-10 --end 2025-01-11 --out data/SE3_A85_fixture.parquet --use-fixture
+```
+### A85 quickstart (live API)
+1) Create a local `.env` (not committed) with `ENTSOE_TOKEN=...`  
+2) Run (UTC, end-exclusive):
+
+```bash
+python src/fetch_a85_entsoe.py --area SE3 --start 2025-01-10 --end 2025-01-11 --out data/SE3_A85_20250110.parquet
+```
+Notes:
+- Day-Ahead uses Bidding Zone EIC; A85 uses Control Area EIC. IDs live in `src/eic_map.py`.
+- Timestamps are UTC; `--end` is exclusive.
+- On “no data” or any error the CLI writes an empty Parquet with the right columns.
+
+## Status — 2025-08-19
+
+- ✅ **DA (A44)** via ENTSO-E REST is **live** → tidy Parquet  secrets in (`.env`).
+- 🟡 **Imbalance (A85)** fetcher is **scaffolded**; the **demo uses converted CSVs** for now.
+- ➡️ **Next:** wire A85 **XML→Parquet** for **SE3/SE4**, then extend to **FI** and update the joins/plots.
+- ℹ️ Outputs target **15-minute granularity** (Nordic ISP), with one-click Windows rebuilds.
+
+
 ## Status — 2025-08-19
 
 - ✅ **DA (A44)** via ENTSO-E REST is **live** → tidy Parquet  secrets in (`.env`).
