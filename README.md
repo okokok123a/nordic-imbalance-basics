@@ -5,6 +5,9 @@ Fetch, tidy, and visualize Nordic (SE3/SE4/FI) **imbalance prices & volumes** wi
 
 > **Why this exists:** Imbalance exposure drives intraday/VPP decisions. This repo cleans Nordic imbalance data (demo for now) and gives fast visuals to decide when to rebid vs accept deviation.
 
+> **Open-source only (from 2025-08-20):** New code is authored manually using standard open-source libraries (requests/entsoe-py, lxml, pandas, matplotlib, etc.).  
+> **No LLMs at runtime.** See `docs/PROVENANCE.md` for the history and policy.
+
 ## Status — 2025-08-19
 
 - ✅ **DA (A44)** via ENTSO-E REST is **live** → tidy Parquet  secrets in (`.env`).
