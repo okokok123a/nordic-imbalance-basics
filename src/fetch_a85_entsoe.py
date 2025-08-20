@@ -1,9 +1,9 @@
 """CLI: fetch A85 (imbalance price) from ENTSO-E and write Parquet.
 
-Step 9.2: real work
 - --use-fixture reads tests/fixtures/a85_sample.xml (no token needed)
 - otherwise calls ENTSO-E, parses, and writes Parquet
 - safe on errors: writes empty Parquet with correct columns
+- logs: start + info + done lines
 """
 from __future__ import annotations
 
@@ -15,7 +15,6 @@ import pandas as pd  # type: ignore
 
 from eic_map import CONTROL_AREA_EIC
 from a85_client import fetch_raw_a85_xml
-from a85_parser import parse_a85_xml
 
 
 def _parse_args() -> argparse.Namespace:
@@ -48,11 +47,17 @@ def main() -> int:
     end_utc = _to_utc_midnight(args.end)
     out_path = Path(args.out)
 
+    print(f"[start] A85 area={args.area} ca_eic={ca_eic} start={start_utc} end={end_utc} out={out_path}")
+
     try:
         if args.use_fixture:
+            print("[info] using offline fixture: tests/fixtures/a85_sample.xml")
             xml_text = Path("tests/fixtures/a85_sample.xml").read_text(encoding="utf-8")
         else:
+            print("[info] calling ENTSO-E API (cached, with retries)...")
             xml_text = fetch_raw_a85_xml(ca_eic, start_utc, end_utc)
+
+        from a85_parser import parse_a85_xml  # local import to avoid cycles
         df = parse_a85_xml(xml_text)
     except Exception as e:
         print(f"[warn] A85 fetch/parse failed: {e}")
@@ -60,7 +65,7 @@ def main() -> int:
 
     _write_parquet(df, out_path)
 
-    print(f"[done] area={args.area} rows={len(df)} out={out_path}")
+    print(f"[done]  area={args.area} rows={len(df)} out={out_path}")
     if df.empty:
         print("[note] wrote an EMPTY parquet (no data or error).")
     return 0
