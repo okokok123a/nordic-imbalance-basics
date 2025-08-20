@@ -95,6 +95,8 @@ See quick stats: [reports/SE3/da_vs_imbalance_stats.md](reports/SE3/da_vs_imbala
 **API (live fetch) version**  
 <img alt="SE3: DA vs Imbalance price — API" src="reports/SE3/da_vs_imbalance_api.png" width="640">
 
+Note: uses demo imbalance parquet (SE3_imbalance_api_demo.parquet) while A85 is empty.
+
 See quick stats: [reports/SE3/da_vs_imbalance_api_stats.md](reports/SE3/da_vs_imbalance_api_stats.md)
 
 
