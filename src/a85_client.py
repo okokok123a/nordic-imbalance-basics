@@ -7,9 +7,24 @@ import os
 from datetime import datetime, timezone
 from typing import Dict
 
+from requests.exceptions import HTTPError, Timeout, ConnectionError  # type: ignore
+from requests_cache import CachedSession  # type: ignore
+from tenacity import (  # type: ignore
+    retry,
+    wait_exponential,
+    stop_after_attempt,
+    retry_if_exception_type,
+)
 from dotenv import load_dotenv
 
 API_URL = "https://transparency.entsoe.eu/api"
+
+# Short-lived cache (~15 minutes). Creates entsoe_cache.sqlite locally.
+SESSION: CachedSession = CachedSession(
+    cache_name="entsoe_cache",
+    backend="sqlite",
+    expire_after=15 * 60,  # seconds
+)
 
 
 def get_token() -> str:
@@ -40,18 +55,22 @@ def build_a85_params(
         "periodStart": to_entsoe_period(start_utc),
         "periodEnd": to_entsoe_period(end_utc),
     }
-# --- Raw HTTP call (no retries yet) ------------------------------------------
-from typing import Dict
-import requests
-from requests.exceptions import HTTPError
 
+
+# Retry transient HTTP/network errors up to 3 attempts with exponential backoff.
+@retry(
+    wait=wait_exponential(multiplier=1, min=1, max=10),
+    stop=stop_after_attempt(3),
+    retry=retry_if_exception_type((HTTPError, Timeout, ConnectionError)),
+    reraise=True,
+)
 def fetch_raw_a85_xml(control_area_eic: str, start_utc: datetime, end_utc: datetime) -> str:
     """
     Call ENTSO-E REST for A85 (imbalance price) and return raw XML text.
-    NOTE: No retries/caching here; that comes later.
+    Uses a cached session to avoid needless repeated calls.
     """
     params: Dict[str, str] = build_a85_params(control_area_eic, start_utc, end_utc)
-    resp = requests.get(API_URL, params=params, timeout=30)
+    resp = SESSION.get(API_URL, params=params, timeout=30)
     try:
         resp.raise_for_status()
     except HTTPError as e:
